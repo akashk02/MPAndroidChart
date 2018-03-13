@@ -1,17 +1,17 @@
 package com.example.android.mpandroidchart;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,23 +31,33 @@ public class MainActivity extends AppCompatActivity {
         chart = (LineChart) findViewById(R.id.chart);
         List<Entry> entries = new ArrayList<>();
 
-        entries.add(new Entry(2, 38));
-        entries.add(new Entry(3, 25));
-        entries.add(new Entry(4, 39));
-        entries.add(new Entry(5, 30));
-        entries.add(new Entry(6, 22));
-        entries.add(new Entry(7, 26));
-        entries.add(new Entry(8, 28));
-        entries.add(new Entry(9, 34));
-        entries.add(new Entry(10, 31));
-        entries.add(new Entry(11, 21));
-        entries.add(new Entry(12, 50));
+
+        entries.add(new Entry(2, 38 ,"02 Aug’17"));
+        entries.add(new Entry(3, 25 ,"03 Aug’17"));
+        entries.add(new Entry(4, 39 ,"04 Aug’17"));
+        entries.add(new Entry(5, 30 ,"05 Aug’17"));
+        entries.add(new Entry(6, 22 ,"06 Aug’17"));
+        entries.add(new Entry(7, 26 ,"07 Aug’17"));
+        entries.add(new Entry(8, 28 ,"08 Aug’17"));
+        entries.add(new Entry(9, 34 ,"09 Aug’17"));
+        entries.add(new Entry(10, 31,"10 Aug’17"));
+        entries.add(new Entry(11, 21,"11 Aug’17"));
+        entries.add(new Entry(12, 50,"12 Aug’17"));
 
         LineDataSet dataSet = new LineDataSet(entries, "Lifeline"); // add entries to dataset
-        dataSet.setColor(Color.BLUE);
-        dataSet.setLineWidth(6);
+        dataSet.setLineWidth(8);
+        dataSet.setValueTextSize(18);
+        dataSet.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return entry.getData().toString();
+            }
+        });
+
+        dataSet.setValueTypeface(Typeface.createFromAsset(getAssets(),"fonts/Lobster.otf"));
 
         LineData lineData = new LineData(dataSet);
+        lineData.setValueTextColor(R.color.graph);
 
         chart.setData(lineData);
         chart.setVisibleXRangeMaximum(2);
@@ -60,37 +70,24 @@ public class MainActivity extends AppCompatActivity {
         leftYAxis = chart.getAxisLeft();
         leftYAxis.setAxisMinimum(10f); // start at 10
         leftYAxis.setDrawGridLines(false); // no grid lines
+        leftYAxis.setTextSize(14);
+        leftYAxis.setTextColor(R.color.graph);
+        leftYAxis.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Lobster.otf"));
 
         rightYAxis = chart.getAxisRight();
         rightYAxis.setDrawGridLines(false); // no grid lines
         rightYAxis.setDrawAxisLine(false); // no axis line
-        rightYAxis.setDrawLabels(false);
+        rightYAxis.setDrawLabels(false); // no axis line
 
         xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(0f); // start at zero
         xAxis.setDrawGridLines(false); // no grid lines
         xAxis.setDrawAxisLine(false); // no axis line
-
-        String[] values = {"0", "01 Aug’17", "02 Aug’17", "03 Aug’17", "04 Aug’17", "05 Aug’17", "06 Aug’17", "07 Aug’17", "08 Aug’17", "09 Aug’17", "10 Aug’17", "11 Aug’17", "12 Aug’17", "13 Aug’17", "14 Aug’17", "15 Aug’17"};
-        xAxis.setValueFormatter(new xAxisFormatter(values));
-        xAxis.setGranularity(1);
+        xAxis.setTextSize(14);
+        xAxis.setTextColor(R.color.graph);
+        xAxis.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Lobster.otf"));
+        xAxis.setDrawLabels(false); // no axis line
 
     }
-
-    public class xAxisFormatter implements IAxisValueFormatter {
-
-        private String[] mValues;
-
-        public xAxisFormatter(String[] values) {
-            mValues = values;
-        }
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            return mValues[(int) value];
-        }
-    }
-
-
 }
